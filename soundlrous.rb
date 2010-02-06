@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-# Soundlrous
-#   Embed SoundCloud players on Tumblr and/or Posterous
-#   I read the tumblr-api and postly ruby gems and took the parts I liked.
+# Soundlrous - Embed SoundCloud players on Tumblr and/or Posterous
+#   I read the tumblr-api and postly ruby gems
+#   and took the parts I liked.
 # Hannes Tydén, 2010-02-06
 # hannes@tyden.name
 
@@ -80,7 +80,7 @@ EMBED_CODE
     :tags  => "soundcloud, soundlrous",
   }
   
-  DEBUGMODE = false
+  DEBUGMODE = true
   
   extend self
   
@@ -242,6 +242,10 @@ begin
       options[:save] = true
     end
     
+    opts.on("-x", "--save-password", "Save password in defaults") do |persist|
+      options[:save_password] = true
+    end
+    
     opts.separator ""
     opts.separator "Common options:"
   
@@ -283,7 +287,8 @@ begin
   #   do so if no config persited
   #   or persistance is wanted
   if options.size > 0 && (!File.exists?(config_path) || options[:save])
-    to_persist = Hash[*(options.select { |key, value| ![ :url, :save ].include?(key) }.flatten)]
+    to_persist = Hash[*(options.select { |key, value| ![ :url, :save, :passw, :save_password ].include?(key) }.flatten)]
+    to_persist[:passw] = options[:passw] if options[:save_password]
     File.open(config_path, 'w') do |file|
       file << JSON.pretty_generate(to_persist)
     end
