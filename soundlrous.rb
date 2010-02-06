@@ -35,7 +35,7 @@ require 'json'
 require 'cgi'
 require 'optparse'
 
-# Taken from ActiveSupport 3.0.0 Beta
+# Taken from ActiveSupport 3.0.0 Beta, with some recurion sprinkled on top.
 module HashSymbolizeKeys
   # Return a new hash with all keys converted to symbols, as long as
   # they respond to +to_sym+.
@@ -73,10 +73,11 @@ EMBED_CODE
   
   DEFAULT_OPTIONS = {
     :title => "{soundcloud::full_title}",
-    :body  => "<p>{soundcloud::code}</p><p>Posted using Soundlrous</p>",
+    :body  => %Q(<p>{soundcloud::code}</p><p>Posted using <a href="http://github.com/hannestyden/soundlrous">Soundlrous</a></p>),
     :color => "ff6600",
     :size  => 425,
     :type  => 'artwork',
+    :tags  => "soundcloud, soundlrous",
   }
   
   DEBUGMODE = false
@@ -296,7 +297,7 @@ begin
   
   puts "Posted to #{service}"
   puts "Response:"
-  puts response
+  p response
 rescue OptionParser::MissingArgument
   puts opp
 end
